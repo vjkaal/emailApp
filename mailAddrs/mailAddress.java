@@ -2,12 +2,15 @@ package mailAddrs;
 
 import com.opencsv.CSVWriter;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 class mailAddress extends mailBox{
 
@@ -100,13 +103,26 @@ class mailAddress extends mailBox{
         //read csv file here
         PrintWriter pw=new PrintWriter(System.out,true);
         try {
-            CSVWriter cw=new CSVWriter(new FileWriter("info.csv"));
+            File file=new File("info.csv");
+            FileWriter bw=new FileWriter(file,true);
             String[] entry={String.valueOf(this.srno),this.mailAddress,this.firstName,this.lastName,this.dept,this.password};
-            cw.writeNext(entry);
+            bw.append("\n");
+            bw.append(Arrays.toString(entry));
+            bw.close();
+            readFile(file);
         }
         catch (Exception e){
             pw.println(e);
         }
+    }
+
+    private void readFile(File file){
+        try {
+            Scanner in=new Scanner(new File(String.valueOf(file)));
+            while(in.hasNext()){System.out.print(in.next());}
+            System.out.println("yes");
+        }
+        catch (Exception e){e.printStackTrace();}
     }
 
     public void putInfo(){

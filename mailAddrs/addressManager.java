@@ -1,29 +1,27 @@
 package mailAddrs;
 
-import com.opencsv.CSVWriter;
 import mailContent.textFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.InputMismatchException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class addressManager {
     private static final LinkedList<mailAddress> mail=new LinkedList<>();
     private static int i=0;
 
+    private static final PrintWriter pw = new PrintWriter(System.out,true);
+
     //resolve srno
     protected static void createAccount(){
         makeInfoFile();
         Scanner in=new Scanner(System.in);
-        System.out.print("Enter first name: ");
+        pw.print("Enter first name: ");
         String fName=in.nextLine();
-        System.out.print("Enter last name: ");
+        pw.print("Enter last name: ");
         String lName=in.nextLine();
-        System.out.print("Enter dept: ");
+        pw.print("Enter dept: ");
         String dept=in.nextLine();
         mail.add(new mailAddress());
         mail.get(i).setName(fName,lName, getSrNo());
@@ -34,14 +32,31 @@ public class addressManager {
     private static void makeInfoFile(){
         try{
             File file=new File("info.csv");
-            System.out.println("File Exists: "+file.exists());
-            FileWriter fw=new FileWriter(file);
-            CSVWriter cw=new CSVWriter(fw);
-            String[] Header={"Sr.no","Mail Address","First Name","Last Name","Dept.","Password"};
-            cw.writeNext(Header);
+            if(!file.exists()){
+                file.createNewFile();
+                String[] Header={"Sr.no","Mail Address","First Name","Last Name","Dept.","Password"};
+                FileWriter cw=new FileWriter(file,true);
+                cw.write(Arrays.toString(Header));
+                cw.close();
+                readFile(file);
+            }
         }
         catch (Exception e){
-            System.out.println("Error: "+e);
+            pw.println("Error: "+e);
+        }
+    }
+
+    private static void readFile(File file){
+        try{
+            Scanner in=new Scanner(new File(String.valueOf(file)));
+            in.useDelimiter(",");
+            while(in.hasNext()){
+                pw.print(in.next());
+            }
+            pw.println("\nyes");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -53,7 +68,7 @@ public class addressManager {
             while(br.readLine()!=null) srNo++;
         }
         catch (Exception e){
-            System.out.println("Error: "+e);
+            pw.println("Error: "+e);
         }
         return srNo;
     }
@@ -61,32 +76,33 @@ public class addressManager {
     //Find a way to fast out the login process for large list size
     protected static void login(){
         Scanner in=new Scanner(System.in);
-        System.out.print("Enter mail Address: ");
+        pw.print("Enter mail Address: ");
         String mailAddress=in.nextLine();
-        System.out.print("Enter password: ");
+        pw.print("Enter password: ");
         String pass=in.nextLine();
         boolean found, matched;
         File file;
+        pw.println("yes");
         try{
             file=new File("info.csv");
             List<String> lines= Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
             int j=0;
             for(String line:lines){
-                String[] array=line.split(";");
+                String[] array=line.split(",");
                 found = mailAddress.equals(array[1]);
                 if(found){
                     matched=pass.equals(array[array.length-1]);
                     if(matched){
                         loginMenu(j);
                     }
-                    else{System.out.println("mail address or pass is wrong!");}
+                    else{pw.println("mail address or pass is wrong!");}
                     break;
                 }
                 j++;
             }
         }
         catch (Exception e){
-            System.out.println("Error: "+e);
+            pw.println("Error: "+e);
         }
     }
 
@@ -94,22 +110,22 @@ public class addressManager {
         Scanner in=new Scanner(System.in);
         mail.get(x).putInfo();
 //        try{
-//            System.out.println(System.in.available());
+//            pw.println(System.in.available());
 //        }
 //        catch (Exception e){
-//            System.out.println("error: "+e);
+//            pw.println("error: "+e);
 //        }
-        System.out.println("\nActions:");
-        System.out.println("Change password: Press 1");
-        System.out.println("Send Mail: Press 2");
-        System.out.println("Read Mails: Press 3");
-        System.out.println("Exit: Press 0");
+        pw.println("\nActions:");
+        pw.println("Change password: Press 1");
+        pw.println("Send Mail: Press 2");
+        pw.println("Read Mails: Press 3");
+        pw.println("Exit: Press 0");
         int res;
         try{
             res=in.nextInt();
         }
         catch (InputMismatchException e) {
-            System.out.print("Enter only above values: ");
+            pw.print("Enter only above values: ");
             res=in.nextInt();
         }
         in.nextLine();
@@ -117,31 +133,31 @@ public class addressManager {
             case 1: changePass(x);break;
             case 2: sendMail(x);break;
             case 3: readMails(x);break;
-            case 0:System.out.println("Exiting");break;
+            case 0:pw.println("Exiting");break;
         }
     }
 
     private static void changePass(int x){
         Scanner in=new Scanner(System.in);
-        System.out.println("Enter current pass: ");
+        pw.println("Enter current pass: ");
         String pass=in.nextLine();
         boolean matched=mail.get(x).chkPass(pass);
         if(matched){
             boolean equal = false;
             while(!equal){
-                System.out.print("Enter new pass: ");
+                pw.print("Enter new pass: ");
                 pass=in.nextLine();
-                System.out.print("Re-Enter new pass: ");
+                pw.print("Re-Enter new pass: ");
                 String pass2=in.nextLine();
                 equal=pass.equals(pass2);
                 if(equal){
                     mail.get(x).setPass(pass);
-                    System.out.println("Pass changed");
+                    pw.println("Pass changed");
                 }
             }
         }
         else{
-            System.out.println("wrong pass, enter again..");
+            pw.println("wrong pass, enter again..");
             changePass(x);
         }
         loginMenu(x);
@@ -159,16 +175,15 @@ public class addressManager {
 //            }
 //        }
 //        email.deleteFile();
-        System.out.println("currently in development process");
+        pw.println("currently in development process");
         loginMenu(x);
     }
 
     private static void readMails(int x){
 //        mailAddress mails=new mailAddress();
-        PrintWriter pw=new PrintWriter(System.out,true);
         BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         String dirPath=mail.get(x).getDirPath();
-        System.out.println(dirPath);
+        pw.println(dirPath);
         File folder=new File(dirPath);
         File[] fileList=folder.listFiles();
         for(File file: fileList){

@@ -1,28 +1,39 @@
 import mailAddrs.addressManager;
 
-import java.util.Scanner;
+import java.io.*;
 
 class start extends addressManager {
 
-    private static final Scanner in=new Scanner(System.in);
+    private static final BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    private static final PrintWriter pw = new PrintWriter(System.out,true);
     public static void main(String[] args){
         int selection=1;
         while(selection!=0){
-            selection=menuBar();
+            try {
+                selection=menuBar();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             System.out.println();
             switch(selection){
                 case 1: createAccount();break;
                 case 2: login();break;
-                case 0: System.out.println("Exiting");
+                case 0: pw.println("Exiting");
             }
         }
-        in.close();
+        try {
+            br.close();
+        }
+        catch(Exception e){
+            pw.println(e);
+        }
+        pw.close();
     }
 
-    private static int menuBar(){
+    private static int menuBar()throws IOException{
 		System.out.println("Create New Account: Press 1");
         System.out.println("Login to Existing Account: Press 2");
         System.out.println("Exit: Press 0");
-        return in.nextInt();
+        return Integer.parseInt(br.readLine());
     }
 }
