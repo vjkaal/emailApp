@@ -131,22 +131,22 @@ public class addressManager {
 			pw.println("Exit: Press 0");
 			int res = 0;
 			try{
-					res = Integer.parseInt(br.readLine());
+				res = Integer.parseInt(br.readLine());
 			}
 			catch (IOException e) {
-					pw.printf("Enter only Integer value: ");
-					try{
-						res = Integer.parseInt(br.readLine());
-					}
-					catch(IOException f){
-						f.printStackTrace();
-					}
+				pw.printf("Enter only Integer value: ");
+				try{
+					res = Integer.parseInt(br.readLine());
+				}
+				catch(IOException f){
+					f.printStackTrace();
+				}
 			}
 			switch(res){
-					case 1: changePass(x);break;
-					case 2: sendMail();break;
-					case 3: readMails();break;
-					case 0:pw.println("Exiting");break;
+				case 1: changePass(x);break;
+				case 2: sendMail(x);break;
+				case 3: readMails(x);break;
+				case 0:pw.println("Exiting");break;
 			}
 		}
 		catch (Exception e){
@@ -162,42 +162,42 @@ public class addressManager {
 			pw.printf("Enter current pass: ");
 			String pass = "";
 			try{
-					pass = br.readLine();
+				pass = br.readLine();
 			}
 			catch(IOException e){
-					e.printStackTrace();
+				e.printStackTrace();
 			}
 			boolean matched = pass.equals(info[2].trim());
 			if(matched){
-					boolean equal = false;
-					while(!equal){
-						pw.printf("Enter new pass: ");
-						pass = "";
-						try{
-							pass = br.readLine();
-						}
-						catch(IOException e){
-							e.printStackTrace();
-						}
-						pw.printf("Re-Enter new pass: ");
-						String pass2 = "";
-						try{
-							pass2 = br.readLine();
-						}
-						catch(IOException e){
-							e.printStackTrace();
-						}
-						equal=pass.equals(pass2);
-						if(equal){
-//                        FileWriter fw = new FileWriter(file,true);
-//                        fw.
-//                        pw.println("Pass changed");
-						}
+				boolean equal = false;
+				while(!equal){
+					pw.printf("Enter new pass: ");
+					pass = "";
+					try{
+						pass = br.readLine();
 					}
+					catch(IOException e){
+						e.printStackTrace();
+					}
+					pw.printf("Re-Enter new pass: ");
+					String pass2 = "";
+					try{
+						pass2 = br.readLine();
+					}
+					catch(IOException e){
+						e.printStackTrace();
+					}
+					equal=pass.equals(pass2);
+					if(equal){
+						// FileWriter fw = new FileWriter(file,true);
+						// fw.
+						// pw.println("Pass changed");
+					}
+				}
 			}
 			else{
-					pw.println("wrong pass, enter again..");
-					changePass(x);
+				pw.println("wrong pass, enter again..");
+				changePass(x);
 			}
 		}
 		catch(Exception e){
@@ -206,39 +206,39 @@ public class addressManager {
 		loginMenu(x);
 	}
 
-	private static void sendMail(){
+	private static void sendMail(int x){
 		pw.println("currently in development process");
-		loginMenu(2);
+		loginMenu(x);
 	}
 
-	private static void readMails(){
-//        mailAddress mails=new mailAddress();
-//        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-//        String dirPath=mail.get(x).getDirPath();
-//        pw.println(dirPath);
-//        File folder=new File(dirPath);
-//        File[] fileList=folder.listFiles();
-//        for(File file: fileList){
-//            if(file.isFile()) pw.println(file.getName());
-//        }
-//        String name = "";
-//        pw.printf("Enter file name: ");
-//        try{
-//            name=br.readLine();
-//        }
-//        catch (Exception e){
-//            pw.println(e);
-//        }
-//        for(File file:fileList){
-//            if(file.isFile()){
-//                if(name.equals(file.getName())){
-//                    textFile tf=new textFile();
-//                    tf.fileRead(file);
-//                }
-//            }
-//            else pw.println("File not found");
-//        }
+	private static void readMails(int x){
+		// mailAddress mails=new mailAddress();
+		// BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		// String dirPath=mail.get(x).getDirPath();
+		// pw.println(dirPath);
+		// File folder=new File(dirPath);
+		// File[] fileList=folder.listFiles();
+		// for(File file: fileList){
+		// 		if(file.isFile()) pw.println(file.getName());
+		// }
+		// String name = "";
+		// pw.printf("Enter file name: ");
+		// try{
+		// 		name=br.readLine();
+		// }
+		// catch (Exception e){
+		// 		pw.println(e);
+		// }
+		// for(File file:fileList){
+		// 		if(file.isFile()){
+		// 				if(name.equals(file.getName())){
+		// 						textFile tf=new textFile();
+		// 						tf.fileRead(file);
+		// 				}
+		// 		}
+		// 		else pw.println("File not found");
+		// }
 		pw.println("currently in development process");
-		loginMenu(2);
+		loginMenu(x);
 	}
 }
